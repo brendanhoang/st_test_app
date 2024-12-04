@@ -17,7 +17,8 @@ st.title('Security Data')
 t = st.text_input('Enter stock ticker:',value = 'NVDA')
 ticker = t.upper()
 
-data = get_security(ticker)
+if ticker:
+    data = get_security(ticker)
 # st.write(data.index)
 
 
