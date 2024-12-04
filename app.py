@@ -14,7 +14,7 @@ start_date = oneyr.strftime("%Y-%m-%d")
 
 st.title('Security Data')
 
-t = st.text_input('Enter stock ticker:',value='NVDA',placeholder = 'SBUX, AAPL, etc.', help='Enter name of stock and click enter to run.')
+t = st.text_input('Enter stock ticker:',value='NVDA',placeholder = 'SBUX, AAPL, etc.', help='Enter name of ticker (not case sensitive)')
 ticker = t.upper()
 
 # e = NameError("Please enter a valid stock ticker and hit enter.")
@@ -22,7 +22,7 @@ ticker = t.upper()
 if ticker:
     data = get_security(ticker)
 else:
-    st.info("Please enter a valid stock ticker and hit enter.")
+    st.info("Please enter a valid stock ticker before pressing enter enter.")
 # st.write(data.index)
 
 
