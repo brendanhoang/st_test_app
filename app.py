@@ -45,7 +45,6 @@ with st.sidebar:
         st.dataframe(data.tail(30))
 
 
-# st.markdown(f"Selected display options: {selection} data for ticker **{tickers}**")
 
 options = st.multiselect(
     "Select indicators", 
@@ -54,12 +53,12 @@ options = st.multiselect(
 )
 
 df = data.loc[:,options]
-
 df.insert(0,"close price",data['close'])
 
 st.pyplot(chart_security(df,t=ticker))
 
-
+dt = datetime.date.today().strftime("%m.%d.%Y")
+st.markdown(f'<span style="font-size: 14px">**Source:** Yahoo Finance API | **Date:** {dt} | **Author:** Brendan Hoang </span>', unsafe_allow_html=True)
 
 
 
