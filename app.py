@@ -14,7 +14,7 @@ start_date = oneyr.strftime("%Y-%m-%d")
 
 st.title('Security Data')
 
-t = st.text_input('Enter stock ticker:',placeholder = 'NVDA',help='Enter name of stock and click enter to run.')
+t = st.text_input('Enter stock ticker:',value='NVDA',placeholder = 'SBUX, AAPL, etc.', help='Enter name of stock and click enter to run.')
 ticker = t.upper()
 
 # e = NameError("Please enter a valid stock ticker and hit enter.")
