@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
+import math
 
 oneyr = datetime.datetime.now() - datetime.timedelta(days=1*365)
 start_date = oneyr.strftime("%Y-%m-%d")
@@ -64,7 +65,14 @@ def chart_security(df,t):
     return plt
 
 
+def calc_std_vol(price_data, window, trading_periods=252, clean=False):
+    log_return = (price_data["close"] / price_data["close"].shift(1)).apply(np.log)
+    result = log_return.rolling(window=window, center=False).std() * math.sqrt(trading_periods)
 
+    if clean:
+        return result.dropna()
+    else:
+        return result
 
 
 
