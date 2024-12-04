@@ -17,8 +17,11 @@ st.title('Security Data')
 t = st.text_input('Enter stock ticker:',value = 'NVDA')
 ticker = t.upper()
 
+e = NameError("Please enter a valid stock ticker and hit enter.")
 if ticker:
     data = get_security(ticker)
+else:
+    st.exception(e)
 # st.write(data.index)
 
 
