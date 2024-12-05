@@ -1,11 +1,11 @@
 import streamlit as st
 import yfinance as yf
 
-st.set_page_config(page_title="More Info", page_icon="📈")
+# st.set_page_config(page_title="More Info", page_icon="📈")
 
 # @st.cache_data
 st.title('Additional Information')
-t = st.text_input('Enter ticker')
+t = st.session_state.stock
 sec = yf.Ticker(t)
 st.subheader(f'{t.upper()}')
 

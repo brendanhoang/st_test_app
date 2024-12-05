@@ -11,7 +11,10 @@ start_date = oneyr.strftime("%Y-%m-%d")
 
 
 def get_security(ticker):
-    df = _pull_security_data(ticker)
+    try:
+        df = _pull_security_data(ticker)
+    except:
+        st.warning('Unable to find stock. Please check spelling')
     return df
 
 
@@ -29,6 +32,7 @@ def _calc_ma(df,n):
     out['ema50'] = out['close'].ewm(span=50).mean()
     return out
 
+@st.cache_data
 def _pull_security_data(ticker):
     '''
     Arguments: ticker (string)
