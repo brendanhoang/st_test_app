@@ -5,3 +5,6 @@ streamlit
 matplotlib
 finvizfinance
 plotly
+scipy
+statsmodels
+sklearn

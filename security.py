@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 import math
+import plotly.express as px
 
 oneyr = datetime.datetime.now() - datetime.timedelta(days=1*365)
 start_date = oneyr.strftime("%Y-%m-%d")
@@ -13,6 +14,8 @@ start_date = oneyr.strftime("%Y-%m-%d")
 def get_security(ticker):
     try:
         df = _pull_security_data(ticker)
+        df.isnull().values.any()
+        df = df.dropna()
     except:
         st.warning('Unable to find stock. Please check spelling')
     return df
@@ -25,8 +28,8 @@ def _calc_ma(df,n):
     n = window / number of days
     Returns: 200 day sma?
     '''
-    out = df.copy()
-    out.columns = ['close']
+    out = df.rename(columns={'Adj Close':'close'}).copy()
+    # out.columns = ['close']
     out['sma200'] = out['close'].rolling(n).mean()
     out['ema20'] = out['close'].ewm(span=20).mean()
     out['ema50'] = out['close'].ewm(span=50).mean()
@@ -43,31 +46,57 @@ def _pull_security_data(ticker):
     return data[start_date:]
 
 
-# plt.plot(df.index,df.iloc[:,:1],label='close')
-# plt.plot(df.index,df.iloc[:,:1],label='close')
+
+# NEED TO DEBUG THIS - TOO MANY COLS
+def pull_security_data(ticker,s,e,ohlv_cols=False):
+    if ohlv_cols:
+        data = yf.download(ticker,start=s,end=e)
+    else:
+        data = yf.download(ticker,start=s,end=e)['Adj Close']
+
+    new_data = _calc_ma(data,200)
+
+    new_data.isnull().values.any()
+    new_data = new_data.dropna()
+    return new_data
 
 
 def chart_security(df,t):
     # y=['Closing Price','Simple Moving Avg 200 days']
     plt.figure()
-    df.plot(style={'sma200':'--', 'ema20':':', 'ema50':':'}, figsize=(12,8), x_compat=True)
+    df.plot(style={'sma200':'--', 'ema20':':', 'ema50':':'}, figsize=(12,7), x_compat=True)
     plt.ylabel('Price in USD')
     plt.xlabel('')
     plt.title(f'1 Year Price Chart for {t}')
-
-    # # setting customized ticklabels for x axis 
-    # pos = [ '1959-01-01', '1959-02-01', '1959-03-01', '1959-04-01',  
-    #    '1959-05-01', '1959-06-01', '1959-07-01', '1959-08-01', 
-    #    '1959-09-01', '1959-10-01', '1959-11-01', '1959-12-01'] 
-  
-    # lab = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',  
-    #    'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'] 
-    # plt.xticks( pos, lab) 
-    # ax.set_xticks(df.index)
     plt.legend()
     plt.show()
     return plt
 
+def chart_security_plotly(df,t):
+    fig=px.line(df, 
+                title=f'1 YR PLOTLY LINE CHART FOR {t}', 
+                color_discrete_map={
+                    'close price':'cyan',
+                    'sma200': 'orange',
+                    'ema20': 'magenta',
+                    'ema50': 'red'
+                },
+                line_dash_map={'sma200':'dash',
+                               'ema20':'dash'})
+    fig.update_xaxes(
+        dtick="M1",
+        tickformat="%b\n%Y")
+    fig.update_layout(
+        xaxis_title = 'Date',
+        yaxis_title = 'Price in USD',
+        legend_title_text = "",
+        # legend = dict(yanchor="top",
+        #                 y=0.99,
+        #                 xanchor="left",
+        #                 x=0.01)
+    )
+    # fig.add_trace(go.Scatter())
+    return fig
 
 def calc_std_vol(price_data, window, trading_periods=252, clean=False):
     log_return = (price_data["close"] / price_data["close"].shift(1)).apply(np.log)

@@ -3,7 +3,7 @@ import streamlit as st
 st.set_page_config(layout="wide")
 
 pages = {
-    "Stock Analysis Apps": [
+    "Stock Analysis Pages": [
         st.Page("summary.py", title="Home"),
         st.Page("1_stock_info.py", title="Research"),
     ],
