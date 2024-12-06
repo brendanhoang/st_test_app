@@ -8,3 +8,4 @@ plotly
 scipy
 statsmodels
 pandas_ta
+pkg_resources
