@@ -7,4 +7,3 @@ finvizfinance
 plotly
 scipy
 statsmodels
-sklearn
