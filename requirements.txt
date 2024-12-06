@@ -7,3 +7,4 @@ finvizfinance
 plotly
 scipy
 statsmodels
+pandas_ta
